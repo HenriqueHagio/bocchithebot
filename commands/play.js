@@ -34,17 +34,7 @@ module.exports = {
 
         try {
             
-            // const info = await video_info(url)
-            // const source = await play.stream_from_info(info)
             const linkzinho = await play.stream(url);
-
-            // const playlist = await play.playlist_info(url)
-
-            // const videos = await playlist.all_videos()
-
-            // for(const video of videos) {
-                
-            // }
 
             console.log(`Link capturado: ${url}`);
 
