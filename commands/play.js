@@ -34,10 +34,7 @@ module.exports = {
 
         try {
             
-           
             const linkzinho = await play.stream(url);
-
-            
 
             console.log(`Link capturado: ${url}`);
 
