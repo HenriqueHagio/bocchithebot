@@ -1,7 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { joinVoiceChannel, createAudioPlayer, createAudioResource, getVoiceConnection, generateDependencyReport } = require('@discordjs/voice');
-const ytdl = require('ytdl-core');
-
+const { joinVoiceChannel, createAudioPlayer, createAudioResource, getVoiceConnection } = require('@discordjs/voice');
+const play = require('play-dl')
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -14,6 +13,7 @@ module.exports = {
 
     async execute(interaction) {
         const url = interaction.options.getString('url');
+
         const memberVoiceChannel = interaction.member.voice.channel;
         const botVoiceChannel = getVoiceConnection(interaction.guild.id);
 
@@ -30,22 +30,30 @@ module.exports = {
             guildId: interaction.guild.id,
             adapterCreator: interaction.guild.voiceAdapterCreator,
         });
-        
+
 
         try {
-            const stream = ytdl(url, { filter: 'audioonly' });
+            
+           
+            const linkzinho = await play.stream(url);
+
+            
+
             console.log(`Link capturado: ${url}`);
 
-            const audioResource = createAudioResource(stream);
-            
+            const resource = createAudioResource(linkzinho.stream, {
+                inputType: linkzinho.type
+            })
+
             const player = createAudioPlayer();
             connection.subscribe(player);
 
-            player.play(audioResource);
-        
-            console.log('Bot está se conectando ao canal de voz...');
-        
-        
+            player.play(resource);
+
+
+
+
+
             player.on('idle', () => {
                 if (botVoiceChannel) {
                     // Deixe o canal de voz apenas se o bot já estava nele
@@ -53,17 +61,20 @@ module.exports = {
                 }
             });
 
-            console.log(generateDependencyReport());
-        
+
             player.on('error', (error) => {
                 console.error('Erro do player:', error);
                 interaction.reply('Ocorreu um erro ao reproduzir a música.');
             });
-        
+
             console.log('Bot se conectou com sucesso ao canal de voz.');
         } catch (error) {
             console.error('Erro ao reproduzir música:', error);
             interaction.reply('Ocorreu um erro ao reproduzir a música.');
         }
+
+        await interaction.reply("Bocchi esta tocante!: " + url)
+
     }
+
 };
