@@ -12,6 +12,7 @@ const play = require('play-dl');
 const queue = [];
 
 module.exports = {
+  queue,
   data: new SlashCommandBuilder()
     .setName("play")
     .setDescription("Bocchi começa a tocar sua música")
