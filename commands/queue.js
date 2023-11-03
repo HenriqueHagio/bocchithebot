@@ -1,29 +1,39 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { queue } = require('./play.js'); // Importe a fila de músicas do seu código
+const { queue } = require('./play.js');
+const play = require('play-dl');
+const wait = require('node:timers/promises').setTimeout;
 
 const queues = new Map();
 
 function getQueue(guildId) {
-    if(!queues.has(guildId)) {
-        queues.set(guildId, {songs: []});
+    if (!queues.has(guildId)) {
+        queues.set(guildId, { songs: [] });
     }
     return queues.get(guildId);
 }
 
 module.exports = {
-  getQueue,
-  data: new SlashCommandBuilder()
-    .setName('queue')
-    .setDescription('Mostra a fila de músicas'),
+    getQueue,
+    data: new SlashCommandBuilder()
+        .setName('queue')
+        .setDescription('Mostra a fila de músicas'),
 
-  async execute(interaction) {
-    if (queue.length === 0) {
-      return interaction.reply('A fila de músicas está vazia.');
-    }
+    async execute(interaction) {
+        if (queue.length === 0) {
+            return interaction.reply('A fila de músicas está vazia.');
+        }
 
-    // Gere uma lista das músicas na fila
-    const queueList = queue.map((music, index) => `${index + 1}. ${music}`).join('\n');
+        await interaction.deferReply();
+        await wait(4000);
+        
+        const promises = queue.map(async (queueItem, index) => {
+            const videoInfo = await play.video_info(queueItem);
+            return `${index + 1} - ${videoInfo.video_details.title}`;
+        });
 
-    await interaction.reply(`Fila de músicas:\n${queueList}`);
-  },
+        const results = await Promise.all(promises);
+
+       
+        await interaction.editReply(results.join('\n'));
+    },
 };
