@@ -8,21 +8,23 @@ const {
 const play = require('play-dl');
 
 // Lista de músicas em fila
-const queue = [];
+const queuePlaylist = [];
 
 module.exports = {
-  queue,
+  queuePlaylist,
   data: new SlashCommandBuilder()
-    .setName("play")
-    .setDescription("Bocchi começa a tocar sua música")
+    .setName("playlist")
+    .setDescription("Bocchi começa a tocar sua playlist")
     .addStringOption(option =>
       option.setName('url')
-        .setDescription('URL da música a ser tocada.')
+        .setDescription('URL da playlist a ser tocada.')
         .setRequired(true)),
 
   async execute(interaction) {
     const url = interaction.options.getString('url');
-
+    const playlist = await play.playlist_info(url)
+    const musicas = await playlist.all_videos()
+  
     const memberVoiceChannel = interaction.member.voice.channel;
     const botVoiceChannel = getVoiceConnection(interaction.guild.id);
 
@@ -31,7 +33,7 @@ module.exports = {
     }
 
     if (botVoiceChannel && botVoiceChannel.joinConfig.channelId !== memberVoiceChannel.id) {
-      return interaction.reply('O bot já está em outro canal de voz!');
+      return interaction.reply('Bocchi já está em outro canal de voz!');
     }
 
     const connection = joinVoiceChannel({
@@ -40,30 +42,31 @@ module.exports = {
       adapterCreator: interaction.guild.voiceAdapterCreator,
     });
 
-    // Adicione a música atual à fila
-    queue.push(url);
-
-    if (queue.length === 1) {
-      // Se a fila estiver vazia, inicie a reprodução
-      playNextSong(connection);
+    for (const musica of musicas){
+        queuePlaylist.push(musica.url)
     }
 
-    await interaction.reply("Bocchi está tocando!: " + url);
+    // if (queuePlaylist.length === 1) {
+      // Se a fila estiver vazia, inicie a reprodução
+    playNextSong(connection);
+    // }
+
+    await interaction.reply("Albúm de Bocchi!: " + url);
   }
 };
 
 async function playNextSong(connection) {
-  if (queue.length === 0) {
+  if (queuePlaylist.length === 0) {
     // Nada na fila, saia da função
     return;
   }
-  const url = queue[0];
+  
+  const url = queuePlaylist[0];
 
   try {
 
     const linkzinho = await play.stream(url);
 
-    console.log(`Link capturado: ${url}`);
 
     const resource = createAudioResource(linkzinho.stream, {
       inputType: linkzinho.type
@@ -76,9 +79,9 @@ async function playNextSong(connection) {
 
     player.on('idle', () => {
       // Remova a primeira música da fila
-      queue.shift();
+      queuePlaylist.shift();
 
-      if (queue.length > 0) {
+      if (queuePlaylist.length > 0) {
         // Se houver mais músicas na fila, toque a próxima
         playNextSong(connection);
       } else {
