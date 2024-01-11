@@ -2,7 +2,7 @@
 <p align="center"><a href="https://twitter.com/Hagiodev"><img src="https://img.shields.io/badge/twitter-4D4577?style=for-the-badge&logoColor=F2F2F2&logo=twitter"/></a>
 <a href="https://linkedin.com/in/henrique-otone"><img src="https://img.shields.io/badge/linkedin-4D4577?style=for-the-badge&logoColor=F2F2F2&logo=linkedin"/></a>
 <!--<a href="https://nickgabe.vercel.app"><img src="https://img.shields.io/badge/website-4D4577?logo=esri&style=for-the-badge&logoColor=F2F2F2"/></a> -->
-<img align="center" src="https://komarev.com/ghpvc/?username=HenriqueHagio&style=for-the-badge&color=4D4577&logoColor=F2F2F2&logo=undefined"/></p>
+<img src="https://komarev.com/ghpvc/?username=HenriqueHagio&style=for-the-badge&color=4D4577&logoColor=F2F2F2&logo=undefined"/></p>
 <p align="center">👋 Heyyy! I'm Nícolas Gabriel, a brazilian programmer.</p>
 
 ## **About me:**
