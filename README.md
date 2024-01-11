@@ -13,6 +13,8 @@ Breve descrição do projeto.
 ## Instalação
 
 Instruções de instalação e dependências.
+<span style="text-shadow: 2px 2px 4px #888888;">Seu texto aqui</span>
+
 
 ## Uso
 
