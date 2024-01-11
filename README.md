@@ -1,35 +1,30 @@
-# BOCCHITHEBOT!
+%{header}
 
-Breve descrição do projeto.
+## **About me:**
 
-## Índice
-- [Instalação](#instalação)
-- [Uso](#uso)
-- [Exemplos](#exemplos)
-- [Contribuição](#contribuição)
-- [Créditos](#créditos)
-- [Licença](#licença)
+%{aboutme}
+* %{myexperience}
 
-## Instalação
+## **Skills wall:**
 
-Instruções de instalação e dependências.
+%{skillswall}
 
-## Uso
+## **Recent projects:**
 
-Como utilizar o projeto. Exemplos de código.
+%{recentworks}
 
-## Exemplos
+## **You can find me on:**
 
-Inclua exemplos práticos ou capturas de tela.
+*Click to be redirected*
 
-## Contribuição
+%{socialMedias}
 
-Instruções para contribuir, guidelines para pull requests, etc.
+## **Follower of the day**
 
-## Créditos
+*Showcases a random GitHub follower here everyday*
 
-Agradecimentos aos contribuidores e bibliotecas utilizadas.
+%{randomFollower}
 
-## Licença
+<hr>
 
-Este projeto é licenciado sob [Nome da Licença](link).
+%{githubStats}
