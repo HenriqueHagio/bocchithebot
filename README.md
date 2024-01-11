@@ -1,4 +1,4 @@
-<!--<p align="center"><img src="src/resources/images/nickgabe.png" width="600"/></p> --!>
+<!--<p align="center"><img src="src/resources/images/nickgabe.png" width="600"/></p> -->
 <p align="center"><a href="https://twitter.com/Hagiodev"><img src="https://img.shields.io/badge/twitter-4D4577?style=for-the-badge&logoColor=F2F2F2&logo=twitter"/></a>
 <a href="https://linkedin.com/in/henrique-otone"><img src="https://img.shields.io/badge/linkedin-4D4577?style=for-the-badge&logoColor=F2F2F2&logo=linkedin"/></a>
 <!--<a href="https://nickgabe.vercel.app"><img src="https://img.shields.io/badge/website-4D4577?logo=esri&style=for-the-badge&logoColor=F2F2F2"/></a> -->
