@@ -18,6 +18,9 @@ Você instalou a versão 18.13.0 do Node.js
 
 `npm install`
 
+## Iniciar a aplicação
+
+`node index.js`
 
 ## Contribuição
 

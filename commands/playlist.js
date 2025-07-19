@@ -5,7 +5,7 @@ const {
   createAudioResource,
   getVoiceConnection,
 } = require('@discordjs/voice');
-const play = require('play-dl');
+const ytdl = require('@distube/ytdl-core');
 
 // Lista de músicas em fila
 const queuePlaylist = [];

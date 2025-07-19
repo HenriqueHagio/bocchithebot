@@ -5,7 +5,9 @@ const {
   createAudioResource,
   getVoiceConnection,
 } = require('@discordjs/voice');
-const play = require('play-dl');
+const ytdl = require('@distube/ytdl-core');
+
+
 
 // Lista de músicas em fila
 const queue = [];
@@ -22,7 +24,6 @@ module.exports = {
 
   async execute(interaction) {
     const url = interaction.options.getString('url');
-
     const memberVoiceChannel = interaction.member.voice.channel;
     const botVoiceChannel = getVoiceConnection(interaction.guild.id);
 
@@ -54,25 +55,24 @@ module.exports = {
 
 async function playNextSong(connection) {
   if (queue.length === 0) {
-    // Nada na fila, saia da função
     return;
   }
   const url = queue[0];
 
   try {
-
-    const linkzinho = await play.stream(url);
+      
 
     console.log(`Link capturado: ${url}`);
-
-    const resource = createAudioResource(linkzinho.stream, {
-      inputType: linkzinho.type
-    });
+    
+    const linkzinho = ytdl(url, { filter: 'audioonly' })
+   
+    const resource = createAudioResource(linkzinho)
 
     const player = createAudioPlayer();
     connection.subscribe(player);
 
     player.play(resource);
+  
 
     player.on('idle', () => {
       // Remova a primeira música da fila
@@ -93,6 +93,9 @@ async function playNextSong(connection) {
       console.error('Erro do player:', error);
     });
   } catch (error) {
-    console.error('Erro ao reproduzir música:', error);
-  }
+      console.error('Erro ao reproduzir música:');
+      console.error('Nome do erro:', error.name);
+      console.error('Mensagem:', error.message);
+      console.error('Stack trace:', error.stack);  
+    }
 }

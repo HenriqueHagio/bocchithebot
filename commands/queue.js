@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 const { queue } = require('./play.js');
 const { queuePlaylist } = require('./playlist.js');
 
-const play = require('play-dl');
+const ytdl = require('@distube/ytdl-core');
 const wait = require('node:timers/promises').setTimeout;
 
 const queues = new Map();
