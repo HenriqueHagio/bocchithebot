@@ -64,7 +64,7 @@ async function playNextSong(connection) {
 
     console.log(`Link capturado: ${url}`);
     
-    const linkzinho = ytdl(url, { filter: 'audioonly' })
+    const linkzinho = ytdl(url, { filter: 'audioonly', fmt:'mp3', highWaterMark: 1 << 62})
    
     const resource = createAudioResource(linkzinho)
 

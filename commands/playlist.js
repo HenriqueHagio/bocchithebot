@@ -5,7 +5,8 @@ const {
   createAudioResource,
   getVoiceConnection,
 } = require('@discordjs/voice');
-const ytdl = require('@distube/ytdl-core');
+const play = require('@distube/ytdl-core');
+const ytpl = require('ytpl'); // <- muda o nome aqui
 
 // Lista de músicas em fila
 const queuePlaylist = [];
@@ -22,8 +23,8 @@ module.exports = {
 
   async execute(interaction) {
     const url = interaction.options.getString('url');
-    const playlist = await play.playlist_info(url)
-    const musicas = await playlist.all_videos()
+    const playlist = await ytpl(url, { pages: 3 });
+    // const musicas = await playlist.all_videos()
   
     const memberVoiceChannel = interaction.member.voice.channel;
     const botVoiceChannel = getVoiceConnection(interaction.guild.id);
@@ -42,8 +43,8 @@ module.exports = {
       adapterCreator: interaction.guild.voiceAdapterCreator,
     });
 
-    for (const musica of musicas){
-        queuePlaylist.push(musica.url)
+    for (const musica of playlist){
+        queuePlaylist.push(musica.url_simple)
     }
 
     // if (queuePlaylist.length === 1) {
@@ -65,12 +66,9 @@ async function playNextSong(connection) {
 
   try {
 
-    const linkzinho = await play.stream(url);
+    const linkzinho = play(url, { filter: 'audioonly', fmt:'mp3', highWaterMark: 1 << 62})
 
-
-    const resource = createAudioResource(linkzinho.stream, {
-      inputType: linkzinho.type
-    });
+    const resource = createAudioResource(linkzinho)
 
     const player = createAudioPlayer();
     connection.subscribe(player);
