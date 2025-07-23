@@ -6,8 +6,7 @@ const {
   getVoiceConnection,
 } = require('@discordjs/voice');
 const play = require('@distube/ytdl-core');
-const ytpl = require('ytpl'); // <- muda o nome aqui
-
+const playdl = require('play-dl');
 // Lista de músicas em fila
 const queuePlaylist = [];
 
@@ -23,9 +22,11 @@ module.exports = {
 
   async execute(interaction) {
     const url = interaction.options.getString('url');
-    const playlist = await ytpl(url, { pages: 3 });
-    // const musicas = await playlist.all_videos()
-  
+
+    const playlist = await playdl.playlist_info(url)
+    const musicas = await playlist.all_videos()
+
+
     const memberVoiceChannel = interaction.member.voice.channel;
     const botVoiceChannel = getVoiceConnection(interaction.guild.id);
 
@@ -42,9 +43,9 @@ module.exports = {
       guildId: interaction.guild.id,
       adapterCreator: interaction.guild.voiceAdapterCreator,
     });
-
-    for (const musica of playlist){
-        queuePlaylist.push(musica.url_simple)
+    
+    for (const musica of musicas){
+        queuePlaylist.push(musica.url)
     }
 
     // if (queuePlaylist.length === 1) {
