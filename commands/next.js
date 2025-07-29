@@ -20,7 +20,7 @@ module.exports = {
             // Pare a reprodução
             player.stop();
         }
-        await interaction.reply(link)
+        await interaction.reply('Musica trocada')
 
     }
 

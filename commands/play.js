@@ -6,11 +6,13 @@ const {
   getVoiceConnection,
 } = require('@discordjs/voice');
 const ytdl = require('@distube/ytdl-core');
-
-
-
-// Lista de músicas em fila
+const playdl = require('play-dl');
 const queue = [];
+
+function isYouTubeUrl(text) {
+    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
+    return youtubeRegex.test(text);
+}
 
 module.exports = {
   queue,
@@ -41,11 +43,15 @@ module.exports = {
       adapterCreator: interaction.guild.voiceAdapterCreator,
     });
 
-    // Adicione a música atual à fila
-    queue.push(url);
+    if(isYouTubeUrl(url)) {
+      queue.push(url);
+    }
+    else{
+      const term = await playdl.search(url)
+      queue.push(term[0].url);
+    }
 
     if (queue.length === 1) {
-      // Se a fila estiver vazia, inicie a reprodução
       playNextSong(connection);
     }
 
@@ -61,12 +67,10 @@ async function playNextSong(connection) {
 
   try {
       
-
-    console.log(`Link capturado: ${url}`);
     
-    const linkzinho = ytdl(url, { filter: 'audioonly', fmt:'mp3', highWaterMark: 1 << 62})
+    const video = ytdl(url, { filter: 'audioonly', fmt:'mp3', highWaterMark: 1 << 62})
    
-    const resource = createAudioResource(linkzinho)
+    const resource = createAudioResource(video)
 
     const player = createAudioPlayer();
     connection.subscribe(player);
@@ -75,14 +79,10 @@ async function playNextSong(connection) {
   
 
     player.on('idle', () => {
-      // Remova a primeira música da fila
       queue.shift();
-
       if (queue.length > 0) {
-        // Se houver mais músicas na fila, toque a próxima
         playNextSong(connection);
       } else {
-        // Caso contrário, saia do canal de voz
         if (connection) {
           connection.destroy();
         }
@@ -93,9 +93,6 @@ async function playNextSong(connection) {
       console.error('Erro do player:', error);
     });
   } catch (error) {
-      console.error('Erro ao reproduzir música:');
-      console.error('Nome do erro:', error.name);
-      console.error('Mensagem:', error.message);
-      console.error('Stack trace:', error.stack);  
-    }
+      console.error('Erro ao reproduzir música:', error);
+  }
 }

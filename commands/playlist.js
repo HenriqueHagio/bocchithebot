@@ -7,7 +7,6 @@ const {
 } = require('@discordjs/voice');
 const play = require('@distube/ytdl-core');
 const playdl = require('play-dl');
-// Lista de músicas em fila
 const queuePlaylist = [];
 
 module.exports = {
@@ -24,6 +23,7 @@ module.exports = {
     const url = interaction.options.getString('url');
 
     const playlist = await playdl.playlist_info(url)
+
     const musicas = await playlist.all_videos()
 
 
